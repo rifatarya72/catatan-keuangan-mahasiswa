@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buku Kuliah – Catatan, Tugas &amp; Jadwal Mahasiswa</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#eef0fb;--paper:#ffffff;--ink:#1d1b4b;--muted:#6a6892;--line:#dcdff3;--accent:#4338ca;--accent-ink:#fff;
+  --hl:#ffe45c;--c1:#ffe45c;--c2:#b8f0d4;--c3:#ffc2b8;--c4:#c9d6ff;--c5:#f1c9ff;--danger:#d63a4a;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--bg:#14132b;--paper:#1f1e3d;--ink:#eceaff;--muted:#a09ec9;--line:#33316a;--accent:#8b84ff;--accent-ink:#14132b;
+  --c1:#6b5e12;--c2:#1e5a42;--c3:#6b2f27;--c4:#2b3a7a;--c5:#5a2b6b;}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#14132b;--paper:#1f1e3d;--ink:#eceaff;--muted:#a09ec9;--line:#33316a;--accent:#8b84ff;--accent-ink:#14132b;
+  --c1:#6b5e12;--c2:#1e5a42;--c3:#6b2f27;--c4:#2b3a7a;--c5:#5a2b6b;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Instrument Sans",system-ui,sans-serif;
+  background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;line-height:1.15}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.03em}
+h1 mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 .1em}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) h1 mark{background:linear-gradient(transparent 55%,#6b5e12 55%)}}
+.sub{color:var(--muted);margin:6px 0 0}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:8px 14px;min-width:96px;box-shadow:3px 3px 0 var(--ink)}
+.stat b{display:block;font:800 1.6rem "Bricolage Grotesque",sans-serif}
+.stat span{font-size:.8rem;color:var(--muted)}
+nav{display:flex;gap:8px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.tab{border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:9px 18px;border-radius:999px;font:600 .95rem "Instrument Sans",sans-serif;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.ghost{border:2px solid var(--line);background:transparent;color:var(--muted);padding:8px 12px;border-radius:10px;font:500 .85rem inherit;font-family:inherit;cursor:pointer}
+.panel{display:none}.panel.on{display:block}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:22px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:1fr}}
+form.card{background:var(--paper);border:2px solid var(--ink);border-radius:18px;padding:18px;box-shadow:5px 5px 0 var(--ink);display:grid;gap:10px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:820px){form.card{position:static}}
+form h2{font-size:1.25rem}
+label{font-size:.85rem;font-weight:600;color:var(--muted);display:grid;gap:4px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:9px 11px;width:100%}
+textarea{min-height:130px;resize:vertical}
+.swatches{display:flex;gap:8px}
+.swatches input{position:absolute;opacity:0;width:0;height:0}
+.swatches label{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);cursor:pointer;display:block}
+.swatches input:checked+span{box-shadow:0 0 0 3px var(--accent)}
+.swatches span{display:block;width:100%;height:100%;border-radius:50%}
+.btn{background:var(--accent);color:var(--accent-ink);border:2px solid var(--ink);border-radius:12px;padding:10px 16px;font:700 1rem "Bricolage Grotesque",sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink)}
+.row{display:flex;gap:8px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.tools input{flex:1;min-width:160px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:4px 12px;font:500 .85rem inherit;font-family:inherit;cursor:pointer}
+.chip.on{border-color:var(--ink);background:var(--hl);color:#1d1b4b}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.note{border:2px solid var(--ink);border-radius:6px 6px 16px 16px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer;
+  background-image:repeating-linear-gradient(transparent 0 25px,rgba(29,27,75,.08) 25px 26px);transform:rotate(var(--r,0deg))}
+.note h3{font-size:1.15rem}
+.note p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;line-height:26px}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted);margin-top:auto}
+.tag{background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:1px 10px;font-weight:600;color:var(--ink);font-size:.78rem}
+.x{border:0;background:transparent;color:var(--danger);cursor:pointer;font-size:1.1rem;padding:2px 6px;border-radius:6px}
+.note,.note h3,.note p{color:#1d1b4b}
+.note .meta{color:#444270}
+.empty{border:2px dashed var(--line);border-radius:16px;padding:34px 20px;text-align:center;color:var(--muted);grid-column:1/-1}
+.bar{height:12px;background:var(--paper);border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .35s}
+.task{display:flex;gap:12px;align-items:center;background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:11px 14px;margin-bottom:10px}
+.task input{width:22px;height:22px;accent-color:var(--accent);flex:none}
+.task .t{flex:1;min-width:0}
+.task .t b{display:block;overflow-wrap:anywhere}
+.task.done .t b{text-decoration:line-through;color:var(--muted)}
+.due{font-size:.8rem;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--c2);color:#1d1b4b;white-space:nowrap}
+.due.soon{background:var(--c1)}.due.late{background:var(--c3)}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.day{background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:12px;min-height:120px}
+.day.today{box-shadow:4px 4px 0 var(--accent)}
+.day h3{font-size:1rem;margin-bottom:8px}
+.slot{border-radius:10px;padding:8px 10px;margin-bottom:8px;font-size:.88rem;color:#1d1b4b;border:1.5px solid var(--ink);position:relative}
+.slot b{display:block}
+.slot .x{position:absolute;top:2px;right:2px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;font-weight:600}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Buku <mark>Kuliah</mark></h1>
+    <p class="sub" id="hari">Catatan, tugas, dan jadwalmu di satu tempat.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="sN">0</b><span>catatan</span></div>
+    <div class="stat"><b id="sT">0</b><span>tugas aktif</span></div>
+    <div class="stat"><b id="sH">0</b><span>kuliah hari ini</span></div>
+  </div>
+</header>
+
+<nav role="tablist">
+  <button class="tab" role="tab" data-p="catatan" aria-selected="true">Catatan</button>
+  <button class="tab" role="tab" data-p="tugas" aria-selected="false">Tugas</button>
+  <button class="tab" role="tab" data-p="jadwal" aria-selected="false">Jadwal</button>
+  <span class="spacer"></span>
+  <button class="ghost" id="exp">Unduh cadangan</button>
+  <button class="ghost" id="theme">Mode gelap</button>
+</nav>
+
+<!-- CATATAN -->
+<section class="panel on" id="catatan">
+ <div class="layout">
+  <form class="card" id="fN">
+    <h2 id="fNt">Catatan baru</h2>
+    <label>Judul<input id="nJ" required maxlength="80" placeholder="mis. Rangkuman Bab 3"></label>
+    <label>Mata kuliah<input id="nM" list="mk" maxlength="40" placeholder="mis. Statistika"></label>
+    <label>Isi catatan<textarea id="nI" placeholder="Tulis poin penting, rumus, atau ide di sini…"></textarea></label>
+    <label>Warna
+      <div class="swatches" id="nW"></div>
+    </label>
+    <div class="row"><button class="btn" type="submit">Simpan catatan</button><button class="btn alt" type="button" id="nC" hidden>Batal</button></div>
+  </form>
+  <div>
+    <div class="tools"><input type="search" id="q" placeholder="Cari judul atau isi catatan"></div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="notes"></div>
+  </div>
+ </div>
+</section>
+
+<!-- TUGAS -->
+<section class="panel" id="tugas">
+ <div class="layout">
+  <form class="card" id="fT">
+    <h2>Tugas baru</h2>
+    <label>Apa tugasnya?<input id="tJ" required maxlength="100" placeholder="mis. Makalah Etika Profesi"></label>
+    <label>Mata kuliah<input id="tM" list="mk" maxlength="40"></label>
+    <label>Tenggat<input type="date" id="tD" required></label>
+    <button class="btn" type="submit">Tambah tugas</button>
+  </form>
+  <div>
+    <div class="bar"><i id="prog" style="width:0"></i></div>
+    <div id="tasks"></div>
+  </div>
+ </div>
+</section>
+
+<!-- JADWAL -->
+<section class="panel" id="jadwal">
+ <div class="layout">
+  <form class="card" id="fS">
+    <h2>Tambah jadwal kuliah</h2>
+    <label>Mata kuliah<input id="sM" list="mk" required maxlength="40"></label>
+    <label>Hari<select id="sH2"></select></label>
+    <div class="row">
+      <label style="flex:1">Mulai<input type="time" id="sA" required value="08:00"></label>
+      <label style="flex:1">Selesai<input type="time" id="sB" required value="09:40"></label>
+    </div>
+    <label>Ruang<input id="sR" maxlength="30" placeholder="mis. Gedung B 204"></label>
+    <button class="btn" type="submit">Simpan jadwal</button>
+  </form>
+  <div class="days" id="days"></div>
+ </div>
+</section>
+</div>
+<datalist id="mk"></datalist>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+var KEY="buku-kuliah-v1",HARI=["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
+var S={notes:[],tasks:[],sched:[],theme:null},editId=null,filter="Semua",color=1;
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object")S=Object.assign(S,p)}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Penyimpanan browser tidak tersedia")}}
+function $(id){return document.getElementById(id)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove("on")},1800)}
+function todayIdx(){return (new Date().getDay()+6)%7}
+
+// tema
+function applyTheme(){if(S.theme){document.documentElement.setAttribute("data-theme",S.theme)}
+  var dark=S.theme?S.theme==="dark":window.matchMedia("(prefers-color-scheme:dark)").matches;$("theme").textContent=dark?"Mode terang":"Mode gelap"}
+$("theme").onclick=function(){var dark=S.theme?S.theme==="dark":window.matchMedia("(prefers-color-scheme:dark)").matches;S.theme=dark?"light":"dark";save();applyTheme()};
+
+// tab
+document.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){
+  document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected",x===b)});
+  document.querySelectorAll(".panel").forEach(function(p){p.classList.toggle("on",p.id===b.dataset.p)})}});
+
+// warna
+var sw=$("nW");
+for(var i=1;i<=5;i++){(function(i){var l=el("label");l.style.background="var(--c"+i+")";var r=el("input");r.type="radio";r.name="w";r.value=i;r.checked=i===1;
+  r.onchange=function(){color=i};var s=el("span");l.appendChild(r);l.appendChild(s);sw.appendChild(l)})(i)}
+function setColor(c){color=c;sw.querySelectorAll("input").forEach(function(r){r.checked=+r.value===c})}
+
+// mata kuliah
+function courses(){var m={};S.notes.concat(S.tasks,S.sched).forEach(function(x){if(x.mk)m[x.mk]=1});return Object.keys(m).sort()}
+function renderCourses(){var d=$("mk");d.textContent="";courses().forEach(function(c){var o=el("option");o.value=c;d.appendChild(o)})}
+
+// catatan
+function renderNotes(){
+  var q=$("q").value.toLowerCase(),box=$("notes");box.textContent="";
+  var cs=["Semua"].concat(courses()),ch=$("chips");ch.textContent="";
+  if(cs.indexOf(filter)<0)filter="Semua";
+  cs.forEach(function(c){var b=el("button","chip"+(c===filter?" on":""),c);b.type="button";b.onclick=function(){filter=c;renderNotes()};ch.appendChild(b)});
+  var list=S.notes.filter(function(n){return (filter==="Semua"||n.mk===filter)&&(n.t+" "+n.body).toLowerCase().indexOf(q)>-1})
+    .sort(function(a,b){return b.at-a.at});
+  if(!list.length){box.appendChild(el("div","empty",S.notes.length?"Tidak ada catatan yang cocok.":"Belum ada catatan. Tulis catatan pertamamu di formulir."));return}
+  list.forEach(function(n,i){
+    var c=el("article","note");c.style.background="var(--c"+n.c+")";c.style.setProperty("--r",((i%3)-1)*.6+"deg");
+    c.appendChild(el("h3",null,n.t));c.appendChild(el("p",null,n.body));
+    var m=el("div","meta");var left=el("span");if(n.mk)left.appendChild(el("span","tag",n.mk));
+    var right=el("span",null,new Date(n.at).toLocaleDateString("id-ID",{day:"numeric",month:"short"})+" ");
+    var x=el("button","x","✕");x.title="Hapus catatan";x.setAttribute("aria-label","Hapus catatan");
+    x.onclick=function(e){e.stopPropagation();if(confirm("Hapus catatan ini?")){S.notes=S.notes.filter(function(k){return k.id!==n.id});save();renderAll();toast("Catatan dihapus")}};
+    right.appendChild(x);m.appendChild(left);m.appendChild(right);c.appendChild(m);
+    c.onclick=function(){editId=n.id;$("nJ").value=n.t;$("nM").value=n.mk||"";$("nI").value=n.body;setColor(n.c);
+      $("fNt").textContent="Ubah catatan";$("nC").hidden=false;$("nJ").focus();window.scrollTo({top:0,behavior:"smooth"})};
+    box.appendChild(c)});
+}
+function resetN(){editId=null;$("fN").reset();setColor(1);$("fNt").textContent="Catatan baru";$("nC").hidden=true}
+$("nC").onclick=resetN;$("q").oninput=renderNotes;
+$("fN").onsubmit=function(e){e.preventDefault();
+  var o={t:$("nJ").value.trim(),mk:$("nM").value.trim(),body:$("nI").value.trim(),c:color};if(!o.t)return;
+  if(editId){var n=S.notes.find(function(k){return k.id===editId});if(n)Object.assign(n,o,{at:Date.now()});toast("Catatan diperbarui")}
+  else{S.notes.push(Object.assign({id:uid(),at:Date.now()},o));toast("Catatan disimpan")}
+  save();resetN();renderAll()};
+
+// tugas
+function daysLeft(d){var a=new Date(d+"T00:00:00"),b=new Date();b.setHours(0,0,0,0);return Math.round((a-b)/864e5)}
+function renderTasks(){
+  var box=$("tasks");box.textContent="";
+  var done=S.tasks.filter(function(t){return t.done}).length,tot=S.tasks.length;
+  $("prog").style.width=(tot?done/tot*100:0)+"%";
+  if(!tot){box.appendChild(el("div","empty","Belum ada tugas. Tambahkan tugas beserta tenggatnya."));return}
+  S.tasks.slice().sort(function(a,b){return a.done-b.done||a.d.localeCompare(b.d)}).forEach(function(t){
+    var r=el("div","task"+(t.done?" done":""));var cb=el("input");cb.type="checkbox";cb.checked=t.done;cb.setAttribute("aria-label","Tandai selesai");
+    cb.onchange=function(){t.done=cb.checked;save();renderAll();if(t.done)toast("Tugas selesai")};
+    var w=el("div","t");w.appendChild(el("b",null,t.t));if(t.mk)w.appendChild(el("small",null,t.mk));
+    var n=daysLeft(t.d),txt=n<0?"Lewat "+(-n)+" hari":n===0?"Hari ini":n===1?"Besok":n+" hari lagi";
+    var due=el("span","due"+(t.done?"":n<0?" late":n<=2?" soon":""),t.done?"Selesai":txt);
+    var x=el("button","x","✕");x.setAttribute("aria-label","Hapus tugas");
+    x.onclick=function(){S.tasks=S.tasks.filter(function(k){return k.id!==t.id});save();renderAll()};
+    r.appendChild(cb);r.appendChild(w);r.appendChild(due);r.appendChild(x);box.appendChild(r)});
+}
+$("fT").onsubmit=function(e){e.preventDefault();
+  S.tasks.push({id:uid(),t:$("tJ").value.trim(),mk:$("tM").value.trim(),d:$("tD").value,done:false});
+  save();$("fT").reset();renderAll();toast("Tugas ditambahkan")};
+
+// jadwal
+HARI.forEach(function(h,i){var o=el("option",null,h);o.value=i;$("sH2").appendChild(o)});
+function renderSched(){
+  var box=$("days");box.textContent="";
+  HARI.slice(0,6).concat(S.sched.some(function(s){return s.h===6})?["Minggu"]:[]).forEach(function(h,i){
+    var d=el("div","day"+(i===todayIdx()?" today":""));d.appendChild(el("h3",null,h+(i===todayIdx()?" (hari ini)":"")));
+    S.sched.filter(function(s){return s.h===i}).sort(function(a,b){return a.a.localeCompare(b.a)}).forEach(function(s,k){
+      var c=el("div","slot");c.style.background="var(--c"+((s.mk.length%5)+1)+")";
+      c.appendChild(el("b",null,s.mk));c.appendChild(el("span",null,s.a+"–"+s.b+(s.r?" • "+s.r:"")));
+      var x=el("button","x","✕");x.setAttribute("aria-label","Hapus jadwal");
+      x.onclick=function(){S.sched=S.sched.filter(function(z){return z.id!==s.id});save();renderAll()};
+      c.appendChild(x);d.appendChild(c)});
+    box.appendChild(d)});
+}
+$("fS").onsubmit=function(e){e.preventDefault();
+  S.sched.push({id:uid(),mk:$("sM").value.trim(),h:+$("sH2").value,a:$("sA").value,b:$("sB").value,r:$("sR").value.trim()});
+  save();$("sM").value="";$("sR").value="";renderAll();toast("Jadwal disimpan")};
+
+// cadangan
+$("exp").onclick=function(){try{var b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download="buku-kuliah-cadangan.json";a.click()}catch(e){toast("Unduhan tidak didukung di sini")}};
+
+function renderAll(){
+  renderCourses();renderNotes();renderTasks();renderSched();
+  $("sN").textContent=S.notes.length;
+  $("sT").textContent=S.tasks.filter(function(t){return !t.done}).length;
+  $("sH").textContent=S.sched.filter(function(s){return s.h===todayIdx()}).length;
+}
+$("hari").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" – semoga lancar kuliahnya.";
+var td=new Date();td.setDate(td.getDate()+7);$("tD").value=td.toISOString().slice(0,10);
+applyTheme();renderAll();
+})();
+</script>
+</body>
+</html>
